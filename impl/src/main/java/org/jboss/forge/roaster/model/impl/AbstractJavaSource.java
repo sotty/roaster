@@ -168,7 +168,8 @@ public abstract class AbstractJavaSource<O extends JavaSource<O>> implements
       Import imprt;
       if (Types.isSimpleName(strippedClassName) && !hasImport(strippedClassName))
       {
-         throw new IllegalArgumentException("Cannot import class without a package [" + strippedClassName + "]");
+         //throw new IllegalArgumentException("Cannot import class without a package [" + strippedClassName + "]");
+          return null;
       }
 
       if (!hasImport(strippedClassName) && validImport(strippedClassName))

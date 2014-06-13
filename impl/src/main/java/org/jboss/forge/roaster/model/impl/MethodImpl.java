@@ -30,6 +30,7 @@ import org.jboss.forge.roaster.model.TypeVariable;
 import org.jboss.forge.roaster.model.Visibility;
 import org.jboss.forge.roaster.model.ast.AnnotationAccessor;
 import org.jboss.forge.roaster.model.ast.ModifierAccessor;
+import org.jboss.forge.roaster.model.impl.expressions.JdtBlockWrapper;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
@@ -669,7 +670,9 @@ public class MethodImpl<O extends JavaSource<O>> implements MethodSource<O>
    @Override
    public ParameterSource<O> addParameter(String type, String name)
    {
-      getOrigin().addImport(type);
+      if ( ! Types.isPrimitive( type ) ) {
+        getOrigin().addImport(type);
+      }
       String stub = "public class Stub { public void method( " + Types.toSimpleName(type) + " " + name + " ) {} }";
       JavaClassSource temp = (JavaClassSource) Roaster.parse(stub);
       List<MethodSource<JavaClassSource>> methods = temp.getMethods();
@@ -691,4 +694,14 @@ public class MethodImpl<O extends JavaSource<O>> implements MethodSource<O>
       method.parameters().remove(parameter.getInternal());
       return this;
    }
+
+    @Override
+    public org.jboss.forge.roaster.model.Block<O, MethodSource<O>> openBody() {
+        return new BlockImpl<O, MethodSource<O>>( this, method.getAST() );
+    }
+
+    @Override
+    public void wireBlock( org.jboss.forge.roaster.model.Block block ) {
+        method.setBody( (( JdtBlockWrapper ) block ).getBlock() );
+    }
 }

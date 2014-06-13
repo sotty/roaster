@@ -9,6 +9,7 @@ package org.jboss.forge.roaster.model.source;
 
 import java.util.List;
 
+import org.jboss.forge.roaster.model.Block;
 import org.jboss.forge.roaster.model.JavaClass;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.Method;
@@ -21,7 +22,8 @@ import org.jboss.forge.roaster.model.Method;
  */
 public interface MethodSource<O extends JavaSource<O>> extends Method<O, MethodSource<O>>,
          AbstractableSource<MethodSource<O>>,
-         MemberSource<O, MethodSource<O>>, GenericCapableSource<O, MethodSource<O>>
+         MemberSource<O, MethodSource<O>>, GenericCapableSource<O, MethodSource<O>>,
+         BlockHolder<O, MethodSource<O>>
 {
    /**
     * Set this {@link Method} to return the given type.
@@ -104,4 +106,11 @@ public interface MethodSource<O extends JavaSource<O>> extends Method<O, MethodS
     * Remove a parameter from this method
     */
    MethodSource<O> removeParameter(ParameterSource<O> parameter);
+
+   /**
+    * Opens a block of statements to define the method body
+    * @return
+    */
+   public Block<O,MethodSource<O>> openBody();
+
 }
