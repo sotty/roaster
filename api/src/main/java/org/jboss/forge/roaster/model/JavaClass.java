@@ -8,6 +8,7 @@
 package org.jboss.forge.roaster.model;
 
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 /**
  * Represents a Java {@code class} type. See {@link Roaster} for various options in generating {@link JavaClass}
@@ -33,4 +34,5 @@ public interface JavaClass<O extends JavaClass<O>> extends
     */
    public boolean isLocalClass();
 
+   public JavaClassSource asJavaClassSource();
 }

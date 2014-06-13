@@ -182,4 +182,10 @@ public class JavaClassImpl extends AbstractGenericCapableJavaSource<JavaClassSou
 
       return this;
    }
+
+   @Override
+   public JavaClassSource asJavaClassSource()
+   {
+      return this;
+   }
 }
