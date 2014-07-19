@@ -21,15 +21,15 @@ public class WhileStatementsTest
       String target = "while (x < 0) {\n  x=x + 1;\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doWhile()
-            .condition().operator( "<" ).args()
-                .var( "x" ).next()
+      method.setBody().addWhile()
+            .setCondition().operator( "<" ).addArgument()
+                .variableRef( "x" ).nextArgument()
                 .literal( 0 ).noMore()
             .noMore()
-            .repeat()
-                .doAssign().toVar( "x" ).expr().operator( "+" ).args().var( "x" ).next().literal( 1 ).noMore().noMore().done()
-            .close()
-            .done().close();
+            .setBody()
+                .addAssign().setVariableLeftExpression( "x" ).setRightExpression().operator( "+" ).addArgument().variableRef( "x" ).nextArgument().literal( 1 ).noMore().noMore().done()
+            .closeBlock()
+            .done().closeBlock();
 
       assertEquals( target, method.getBody().trim() );
    }

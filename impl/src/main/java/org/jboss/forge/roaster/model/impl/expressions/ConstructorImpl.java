@@ -24,7 +24,7 @@ public class ConstructorImpl<O extends JavaSource<O>, T extends ExpressionSource
     }
 
     @Override
-    public ExpressionFactory<O, ConstructorExpression<O, T>> args() {
+    public ExpressionFactory<O, ConstructorExpression<O, T>> addArgument() {
         return (ExpressionFactory<O, ConstructorExpression<O, T>>) this;
     }
 }

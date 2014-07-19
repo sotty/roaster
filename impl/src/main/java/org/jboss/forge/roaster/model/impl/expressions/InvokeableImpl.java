@@ -7,7 +7,9 @@ import org.jboss.forge.roaster.model.expressions.Expression;
 import org.jboss.forge.roaster.model.expressions.ExpressionFactory;
 import org.jboss.forge.roaster.model.expressions.ExpressionSource;
 import org.jboss.forge.roaster.model.expressions.InvokeExpression;
+import org.jboss.forge.roaster.model.impl.JDTHelper;
 import org.jboss.forge.roaster.model.source.JavaSource;
+import org.jboss.forge.roaster.model.statements.InvokeStatement;
 
 public class InvokeableImpl<O extends JavaSource<O>, T extends ExpressionSource<O>>
         extends ArgumentImpl<O,T>
@@ -22,17 +24,6 @@ public class InvokeableImpl<O extends JavaSource<O>, T extends ExpressionSource<
     }
 
     @Override
-    public InvokeExpression<O, T> on( String ref ) {
-        (( MethodInvocation) expr ).setExpression( ast.newName( ref ) );
-        return this;
-    }
-
-    @Override
-    public InvokeExpression<O, T> on( Class ref ) {
-        return on( ref.getName() );
-    }
-
-    @Override
     public ExpressionFactory<O,InvokeExpression<O,T>> on() {
         state = State.ON;
         MethodInvocation invoke = ( MethodInvocation ) expr;
@@ -41,12 +32,34 @@ public class InvokeableImpl<O extends JavaSource<O>, T extends ExpressionSource<
     }
 
     @Override
+    public InvokeExpression<O, T> onVariable( String varName ) {
+        ( (MethodInvocation) expr ).setExpression( ast.newSimpleName( varName ) );
+        return this;
+    }
+
+    @Override
     public InvokeExpression<O, T> method( String methodName ) {
         (( MethodInvocation) expr ).setName( ast.newSimpleName( methodName ) );
         return this;
     }
 
-    public ExpressionFactory<O,InvokeExpression<O,T>> args() {
+    @Override
+    public InvokeExpression<O, T> staticMethod( String methodName, Class klass ) {
+        (( MethodInvocation) expr ).setName( ast.newSimpleName( methodName ) );
+        (( MethodInvocation) expr ).setExpression( ast.newName( JDTHelper.getTypeName( JDTHelper.getType( klass, expr.getAST() ) ) ) );
+        return this;
+    }
+
+    @Override
+    public InvokeExpression<O, T> staticMethod( String methodName, String klass ) {
+        (( MethodInvocation) expr ).setName( ast.newSimpleName( methodName ) );
+        (( MethodInvocation) expr ).setExpression( ast.newName( JDTHelper.getTypeName( JDTHelper.getType( klass, expr.getAST() ) ) ) );
+        return this;
+    }
+
+
+
+    public ExpressionFactory<O,InvokeExpression<O,T>> addArgument() {
         state = State.ARGS;
         argsRoot = new MockArgumentImpl<O, InvokeExpression<O, T>>( this, expr.getAST() );
         return (ExpressionFactory<O,InvokeExpression<O,T>>) argsRoot;

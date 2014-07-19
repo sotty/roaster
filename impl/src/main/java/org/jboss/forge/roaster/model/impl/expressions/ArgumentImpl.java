@@ -30,7 +30,7 @@ public abstract class ArgumentImpl<O extends JavaSource<O>, T extends Expression
     }
 
     @Override
-    public ExpressionFactory<O,T> next() {
+    public ExpressionFactory<O,T> nextArgument() {
         return ((JdtExpressionWrapper) origin).getBuilder();
     }
 

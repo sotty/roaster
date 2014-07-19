@@ -21,19 +21,19 @@ public class IfStatementsTest
       String target = "if (x != null) {\n  x=null;\n}\n else {\n  x=y;\n  x=x + 1;\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doIf()
-            .condition()
-                .operator( "!=" ).args()
-                    .var( "x" ).next()
-                .nil().noMore()
+      method.setBody().addIf()
+            .setCondition()
+                .operator( "!=" ).addArgument()
+                    .variableRef( "x" ).nextArgument()
+                .nullLiteral().noMore()
                 .noMore()
-            .thenDo()
-                .doAssign().toVar( "x" ).expr().nil().noMore().done()
-            .close()
-            .elseDo()
-                .doAssign().toVar( "x" ).varExpr( "y" ).done()
-                .doAssign().toVar( "x" ).expr().operator( "+" ).args().var( "x" ).next().literal( 1 ).noMore().noMore().done()
-            .close()
+            .setThenBlock()
+                .addAssign().setVariableLeftExpression( "x" ).setRightExpression().nullLiteral().noMore().done()
+            .closeBlock()
+            .setElseBlock()
+                .addAssign().setVariableLeftExpression( "x" ).setVariableRightExpression( "y" )
+                .addAssign().setVariableLeftExpression( "x" ).setRightExpression().operator( "+" ).addArgument().variableRef( "x" ).nextArgument().literal( 1 ).noMore().noMore().done()
+            .closeBlock()
         .done();
 
       assertEquals( target, method.getBody().trim() );
@@ -45,14 +45,14 @@ public class IfStatementsTest
       String target = "if (this.x != y.z) {\n  return false;\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doIf()
-              .condition().operator( "!=" ).args()
-                    .field( "x" ).next()
-                    .var( "y" )
+      method.setBody().addIf()
+              .setCondition().operator( "!=" ).addArgument()
+                    .field( "x" ).nextArgument()
+                    .variableRef( "y" )
                         .dot()
                             .field( "z" ).noMore().noMore()
-              .thenDo()
-                    .doReturn().no();
+              .setThenBlock()
+                    .addReturn().falseLiteral();
 
        assertEquals( target, method.getBody().trim() );
    }
@@ -63,10 +63,10 @@ public class IfStatementsTest
       String target = "if (!x) {\n  return false;\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doIf()
-              .condition().not().var( "x" ).noMore()
-              .thenDo()
-                    .doReturn().no();
+      method.setBody().addIf()
+              .setCondition().not().variableRef( "x" ).noMore()
+              .setThenBlock()
+                    .addReturn().falseLiteral();
 
        assertEquals( target, method.getBody().trim() );
    }
@@ -77,10 +77,10 @@ public class IfStatementsTest
       String target = "if (!!x) {\n  return false;\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doIf()
-              .condition().not().not().var( "x" ).noMore()
-              .thenDo()
-                    .doReturn().no();
+      method.setBody().addIf()
+              .setCondition().not().not().variableRef( "x" ).noMore()
+              .setThenBlock()
+                    .addReturn().falseLiteral();
 
        assertEquals( target, method.getBody().trim() );
    }

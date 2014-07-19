@@ -10,12 +10,12 @@ public interface ForStatement<O extends JavaSource<O>, T extends Block<O,? exten
         extends Statement<O,T>,
                 BlockHolder<O,ForStatement<O,T>> {
 
-    ExpressionFactory<O,ForStatement<O,T>> condition();
+    ExpressionFactory<O,ForStatement<O,T>> setCondition();
 
-    DeclareExpression<O,ForStatement<O,T>> declare();
+    DeclareExpression<O,ForStatement<O,T>> addDeclaration();
 
-    ExpressionFactory<O,ForStatement<O,T>> update();
+    ExpressionFactory<O,ForStatement<O,T>> addUpdate();
 
-    Block<O,ForStatement<O,T>> repeat();
+    Block<O,ForStatement<O,T>> setBody();
 
 }

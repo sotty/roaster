@@ -23,20 +23,20 @@ public class ForStatementsTest
       String target = "for (int j=0, k=0; j < 100; j++, k=k + 2) {\n  java.lang.System.out.println(j);\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doFor()
-              .condition().operator( "<" ).args().var( "j" ).next().literal( 100 ).noMore().noMore()
-              .declare().name( "j" ).type( int.class ).init().literal( 0 ).noMore()
-              .declare().name( "k" ).type( int.class ).init().literal( 0 ).noMore()
-              .update().var( "j" ).inc()
-              .update().assign()
-                    .to().var( "k" ).noMore()
-                    .expr().operator( "+" ).args().var( "k" ).next().literal( 2 ).noMore().noMore()
+      method.setBody().addFor()
+              .setCondition().operator( "<" ).addArgument().variableRef( "j" ).nextArgument().literal( 100 ).noMore().noMore()
+              .addDeclaration().setVariable( "j", int.class ).init().literal( 0 ).noMore()
+              .addDeclaration().setVariable( "k", int.class ).init().literal( 0 ).noMore()
+              .addUpdate().variableRef( "j" ).inc()
+              .addUpdate().assign( "=" )
+                    .setVariableLeftExpression( "k" )
+                    .setRightExpression().operator( "+" ).addArgument().variableRef( "k" ).nextArgument().literal( 2 ).noMore().noMore()
                     .noMore()
-              .repeat()
-                .doInvoke()
-                    .on().klass( System.class ).dot().field( "out" ).noMore()
+              .setBody()
+                .addInvoke()
+                    .on().classLiteral( System.class ).dot().field( "out" ).noMore()
                     .method( "println" )
-                    .args().var( "j" );
+                    .addArgument().variableRef( "j" );
 
       assertEquals( target, method.getBody().trim() );
    }
@@ -48,15 +48,14 @@ public class ForStatementsTest
       String target = "for (java.lang.String name : p.getNames()) {\n  java.lang.System.out.println(name);\n}";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doForEach()
-                    .iterator( "name" )
-                    .type( String.class )
-                    .in().var( "p" ).dot().getter( "names", String.class.getName() ).noMore()
+      method.setBody().addForEach()
+                    .iterator( "name", String.class )
+                    .in().variableRef( "p" ).dot().getter( "names", String.class.getName() ).noMore()
               .repeat()
-                .doInvoke()
-                    .on().klass( System.class ).dot().field( "out" ).noMore()
+                .addInvoke()
+                    .on().classLiteral( System.class ).dot().field( "out" ).noMore()
                     .method( "println" )
-                    .args().var( "name" );
+                    .addArgument().variableRef( "name" );
 
       assertEquals( target, method.getBody().trim() );
    }

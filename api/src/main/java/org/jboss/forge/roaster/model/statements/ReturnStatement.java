@@ -11,15 +11,15 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 public interface ReturnStatement<O extends JavaSource<O>, T extends Block<O,? extends BlockHolder<O,?>>>
         extends Statement<O,T> {
 
-    public ReturnStatement<O,T> var( String name );
+    public ExpressionFactory<O,ReturnStatement<O,T>> setReturnExpression();
 
-    public ExpressionFactory<O,ReturnStatement<O,T>> expr();
+    public T variable( String name );
 
     public InvokeExpression<O,ReturnStatement<O,T>> invoke();
 
-    public ReturnStatement<O,T> nil();
+    public T nullLiteral();
 
-    public ReturnStatement<O,T> yes();
+    public T trueLiteral();
 
-    public ReturnStatement<O,T> no();
+    public T falseLiteral();
 }

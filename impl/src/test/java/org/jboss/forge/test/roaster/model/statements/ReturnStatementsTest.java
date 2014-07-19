@@ -23,7 +23,7 @@ public class ReturnStatementsTest
       String target = "return;";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void hello()" );
 
-      method.openBody().doReturn().done();
+      method.setBody().addReturn().done();
 
       assertEquals( target, method.getBody().trim() );
    }
@@ -34,7 +34,7 @@ public class ReturnStatementsTest
       String target = "return x;";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String echo( String x )" );
 
-      method.openBody().doReturn().var( "x" ).done();
+      method.setBody().addReturn().variable( "x" );
 
       assertEquals( target, method.getBody().trim() );
    }
@@ -45,9 +45,9 @@ public class ReturnStatementsTest
       String target = "return x + 5;";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String echo( String x )" );
 
-      method.openBody().doReturn().expr()
-                .operator( "+" ).args()
-                        .var( "x" ).next()
+      method.setBody().addReturn().setReturnExpression()
+                .operator( "+" ).addArgument()
+                        .variableRef( "x" ).nextArgument()
                         .literal( 5 )
             ;
 
@@ -60,7 +60,7 @@ public class ReturnStatementsTest
         String target = "return java.util.UUID.randomUUID();";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn().invoke().on( UUID.class ).method( "randomUUID" );
+        method.setBody().addReturn().invoke().staticMethod( "randomUUID", UUID.class );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -71,13 +71,11 @@ public class ReturnStatementsTest
         String target = "return java.util.UUID.fromString(\"xyz\");";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn()
+        method.setBody().addReturn()
                 .invoke()
-                    .on( UUID.class )
-                    .args()
+                .staticMethod( "fromString", UUID.class )
+                    .addArgument()
                         .literal( "xyz" )
-                    .noMore()
-                .method( "fromString" )
         ;
 
         assertEquals( target, method.getBody().trim() );
@@ -89,11 +87,11 @@ public class ReturnStatementsTest
         String target = "return x > 0 ? 4 : 5;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public int foo( int x )" );
 
-        method.openBody().doReturn()
-                .expr().ternary()
-                    .condition().operator( ">" ).args().var( "x" ).next().literal( 0 ).noMore().noMore()
-                    .yes().literal( 4 ).noMore()
-                    .no().literal( 5 );
+        method.setBody().addReturn()
+                .setReturnExpression().ternary()
+                    .setCondition().operator( ">" ).addArgument().variableRef( "x" ).nextArgument().literal( 0 ).noMore().noMore()
+                    .setIfExpression().literal( 4 ).noMore()
+                    .setElseExpression().literal( 5 );
         ;
 
         assertEquals( target, method.getBody().trim() );
@@ -105,17 +103,17 @@ public class ReturnStatementsTest
         String target = "return 1 + (x > 3 ? 4 : 5) + 2;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public int foo( int x )" );
 
-        method.openBody().doReturn()
-                .expr()
-                .operator( "+" ).args()
-                    .literal( 1 ).next()
+        method.setBody().addReturn()
+                .setReturnExpression()
+                .operator( "+" ).addArgument()
+                    .literal( 1 ).nextArgument()
                     .paren().ternary()
-                        .condition().operator( ">" ).args().var( "x" ).next().literal( 3 ).noMore().noMore()
-                        .yes().literal( 4 ).noMore()
-                        .no().literal( 5 ).noMore()
+                        .setCondition().operator( ">" ).addArgument().variableRef( "x" ).nextArgument().literal( 3 ).noMore().noMore()
+                        .setIfExpression().literal( 4 ).noMore()
+                        .setElseExpression().literal( 5 ).noMore()
                             .end()
                     .close()
-                .next()
+                .nextArgument()
                     .literal( 2 );
         ;
 
@@ -128,11 +126,8 @@ public class ReturnStatementsTest
         String target = "return (long)(x);";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public long foo( int x )" );
 
-        method.openBody().doReturn()
-                .expr().cast()
-                    .as( "long" )
-                        .expr()
-                            .var( "x" );
+        method.setBody().addReturn()
+                .setReturnExpression().cast( "long" ).variableRef( "x" );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -143,7 +138,7 @@ public class ReturnStatementsTest
         String target = "return null;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn().nil();
+        method.setBody().addReturn().nullLiteral();
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -154,7 +149,7 @@ public class ReturnStatementsTest
         String target = "return getName().bar();";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn().expr()
+        method.setBody().addReturn().setReturnExpression()
                 .getter( "name", "String" ).dot()
                 .invoke().method( "bar" );
 
@@ -167,7 +162,7 @@ public class ReturnStatementsTest
         String target = "return getName().baz;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn().expr()
+        method.setBody().addReturn().setReturnExpression()
                 .getter( "name", "String" ).dot()
                 .field( "baz" );
 
@@ -180,7 +175,7 @@ public class ReturnStatementsTest
         String target = "return this.foo.bar.baz;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn().expr().field( "foo" ).dot().field( "bar" ).dot().field( "baz" );
+        method.setBody().addReturn().setReturnExpression().field( "foo" ).dot().field( "bar" ).dot().field( "baz" );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -191,11 +186,11 @@ public class ReturnStatementsTest
         String target = "return this.foo.getBar().baz.doSomething(this.x.y).getRes();";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public String foo()" );
 
-        method.openBody().doReturn().expr()
+        method.setBody().addReturn().setReturnExpression()
                 .field( "foo" ).dot()
                 .getter( "bar", String.class.getName() ).dot()
                 .field( "baz" ).dot()
-                .invoke().method( "doSomething" ).args()
+                .invoke().method( "doSomething" ).addArgument()
                     .field( "x" )
                     .dot().field( "y" ).noMore().dot()
                 .invoke().method( "getRes" );

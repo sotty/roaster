@@ -21,19 +21,19 @@ public class TernaryImpl<O extends JavaSource<O>, T extends ExpressionSource<O>>
     }
 
     @Override
-    public ExpressionFactory<O, TernaryExpression<O, T>> condition() {
+    public ExpressionFactory<O, TernaryExpression<O, T>> setCondition() {
         state = State.COND;
         return new MockArgumentImpl<O, TernaryExpression<O,T>>( this, expr.getAST() );
     }
 
     @Override
-    public ExpressionFactory<O, TernaryExpression<O, T>> yes() {
+    public ExpressionFactory<O, TernaryExpression<O, T>> setIfExpression() {
         state = State.IF;
         return new MockArgumentImpl<O, TernaryExpression<O,T>>( this, expr.getAST() );
     }
 
     @Override
-    public ExpressionFactory<O, TernaryExpression<O, T>> no() {
+    public ExpressionFactory<O, TernaryExpression<O, T>> setElseExpression() {
         state = State.ELSE;
         return new MockArgumentImpl<O, TernaryExpression<O,T>>( this, expr.getAST() );
     }

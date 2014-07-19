@@ -58,19 +58,15 @@ public class ForEachStatementImpl<O extends JavaSource<O>, T extends Block<O,? e
     }
 
     @Override
-    public ForEachStatement<O,T> iterator( String name ) {
+    public ForEachStatement<O,T> iterator( String name, Class type ) {
         iter.getParameter().setName( iter.getAST().newSimpleName( name ) );
-        return this;
-    }
-
-    @Override
-    public ForEachStatement<O,T> type( String type ) {
         iter.getParameter().setType( JDTHelper.getType( type, iter.getAST() ) );
         return this;
     }
 
     @Override
-    public ForEachStatement<O,T> type( Class<?> type ) {
+    public ForEachStatement<O,T> iterator( String name, String type ) {
+        iter.getParameter().setName( iter.getAST().newSimpleName( name ) );
         iter.getParameter().setType( JDTHelper.getType( type, iter.getAST() ) );
         return this;
     }

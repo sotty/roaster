@@ -38,7 +38,7 @@ public class AssignStatementImpl<O extends JavaSource<O>, T extends Block<O,? ex
         statement = ast.newExpressionStatement( axx );
     }
 
-    public AssignStatement<O,T> toField( String name ) {
+    public AssignStatement<O,T> setFieldLeftExpression( String name ) {
         FieldAccess fld = axx.getAST().newFieldAccess();
         fld.setName( axx.getAST().newSimpleName( name ) );
         fld.setExpression( axx.getAST().newThisExpression() );
@@ -46,25 +46,32 @@ public class AssignStatementImpl<O extends JavaSource<O>, T extends Block<O,? ex
         return this;
     }
 
-    public AssignStatement<O,T> toVar( String name ) {
+    public AssignStatement<O,T> setVariableLeftExpression( String name ) {
         axx.setLeftHandSide( axx.getAST().newSimpleName( name ) );
         return this;
     }
 
     @Override
-    public ExpressionFactory<O, AssignStatement<O, T>> to() {
+    public ExpressionFactory<O, AssignStatement<O, T>> setLeftExpression() {
         state = State.LEFT;
         leftExpr = new MockArgumentImpl<O, AssignStatement<O, T>>( this, axx.getAST() );
         return (ExpressionFactory<O, AssignStatement<O,T>>) leftExpr;
     }
 
-    public AssignStatement<O,T> varExpr( String name ) {
+    public T setVariableRightExpression( String name ) {
         axx.setRightHandSide( axx.getAST().newSimpleName( name ) );
-        return this;
+        return getOrigin();
+    }
+
+    public T setFieldRightExpression( String name ) {
+        FieldAccess right = axx.getAST().newFieldAccess();
+        right.setName( axx.getAST().newSimpleName( name ) );
+        axx.setRightHandSide( right );
+        return getOrigin();
     }
 
     @Override
-    public ExpressionFactory<O,AssignStatement<O,T>> expr() {
+    public ExpressionFactory<O,AssignStatement<O,T>> setRightExpression() {
         state = State.RIGHT;
         rightExpr = new MockArgumentImpl<O, AssignStatement<O, T>>( this, axx.getAST() );
         return (ExpressionFactory<O, AssignStatement<O,T>>) rightExpr;

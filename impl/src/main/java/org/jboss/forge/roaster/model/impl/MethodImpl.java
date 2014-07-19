@@ -696,7 +696,7 @@ public class MethodImpl<O extends JavaSource<O>> implements MethodSource<O>
    }
 
     @Override
-    public org.jboss.forge.roaster.model.Block<O, MethodSource<O>> openBody() {
+    public org.jboss.forge.roaster.model.Block<O, MethodSource<O>> setBody() {
         return new BlockImpl<O, MethodSource<O>>( this, method.getAST() );
     }
 

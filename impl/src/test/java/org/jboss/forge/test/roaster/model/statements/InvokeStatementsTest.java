@@ -11,9 +11,6 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.UUID;
-
 import static org.junit.Assert.assertEquals;
 
 public class InvokeStatementsTest
@@ -25,9 +22,8 @@ public class InvokeStatementsTest
         String target = "java.lang.Math.random();";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on( Math.class )
-                .method( "random" );
+        method.setBody().addInvoke()
+                .staticMethod( "random", Math.class );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -38,12 +34,11 @@ public class InvokeStatementsTest
         String target = "java.lang.Math.round(2.4);";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on( Math.class )
-                .args()
+        method.setBody().addInvoke()
+                .addArgument()
                     .literal( 2.4f )
                 .noMore()
-                .method( "round" );
+                .staticMethod( "round", Math.class );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -54,13 +49,12 @@ public class InvokeStatementsTest
         String target = "java.lang.Math.min(3,4);";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on( Math.class )
-                .args()
-                    .literal( 3 ).next()
+        method.setBody().addInvoke()
+                .addArgument()
+                    .literal( 3 ).nextArgument()
                     .literal( 4 )
                 .noMore()
-                .method( "min" );
+                .staticMethod( "min", Math.class );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -71,12 +65,11 @@ public class InvokeStatementsTest
         String target = "java.lang.Math.min(3,4);";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .args()
-                    .literal( 3 ).next()
+        method.setBody().addInvoke()
+                .addArgument()
+                    .literal( 3 ).nextArgument()
                     .literal( 4 ).noMore()
-                .method( "min" )
-                .on( Math.class );
+                .staticMethod( "min", Math.class );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -87,22 +80,19 @@ public class InvokeStatementsTest
         String target = "java.lang.Math.min(java.lang.Math.max(java.lang.Math.round(3.4),6),4);";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on( Math.class )
-                .args()
+        method.setBody().addInvoke()
+                .addArgument()
                     .invoke()
-                        .on( Math.class )
-                        .args()
+                        .addArgument()
                             .invoke()
-                                .on( Math.class )
-                                .method( "round" )
-                                .args().literal( 3.4 ).noMore()
-                            .next()
+                                .staticMethod( "round", Math.class )
+                                .addArgument().literal( 3.4 ).noMore()
+                            .nextArgument()
                             .literal( 6 ).noMore()
-                        .method( "max" )
-                    .next()
+                        .staticMethod( "max", Math.class )
+                    .nextArgument()
                     .literal( 4 ).noMore()
-                .method( "min" )
+                .staticMethod( "min", Math.class )
                 ;
 
         assertEquals( target, method.getBody().trim() );
@@ -114,18 +104,17 @@ public class InvokeStatementsTest
         String target = "java.lang.Math.min(2 + 3,4 * 5);";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on( Math.class )
-                .args()
-                    .operator( "+" ).args()
-                        .literal( 2 ).next()
+        method.setBody().addInvoke()
+                .addArgument()
+                    .operator( "+" ).addArgument()
+                        .literal( 2 ).nextArgument()
                         .literal( 3 ).noMore()
-                    .next()
-                    .operator( "*" ).args()
-                        .literal( 4 ).next()
+                    .nextArgument()
+                    .operator( "*" ).addArgument()
+                        .literal( 4 ).nextArgument()
                         .literal( 5 ).noMore()
                 .noMore()
-                .method( "min" )
+                .staticMethod( "min", Math.class )
                 ;
 
         assertEquals( target, method.getBody().trim() );
@@ -137,8 +126,8 @@ public class InvokeStatementsTest
         String target = "this.toString();";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on().self().noMore()
+        method.setBody().addInvoke()
+                .on().thisLiteral().noMore()
                 .method( "toString" );
 
         assertEquals( target, method.getBody().trim() );
@@ -150,8 +139,8 @@ public class InvokeStatementsTest
         String target = "this.getName().foo().bar().baz.toString();";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo()" );
 
-        method.openBody().doInvoke()
-                .on().self().dot().getter( "name", "String" ).dot().invoke().method( "foo" ).dot().invoke().method( "bar" ).dot().field( "baz" ).noMore()
+        method.setBody().addInvoke()
+                .on().thisLiteral().dot().getter( "name", "String" ).dot().invoke().method( "foo" ).dot().invoke().method( "bar" ).dot().field( "baz" ).noMore()
                 .method( "toString" );
 
         assertEquals( target, method.getBody().trim() );

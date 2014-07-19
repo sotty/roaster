@@ -14,5 +14,6 @@ public enum ExpressionTypes {
     VAR,
     UNARY,
     CAST,
-    NOT, ASSIGN;
+    NOT,
+    ASSIGN;
 }

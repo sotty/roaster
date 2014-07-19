@@ -10,14 +10,14 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 public interface AssignStatement<O extends JavaSource<O>, T extends Block<O,? extends BlockHolder<O,?>>>
         extends Statement<O,T> {
 
-    public AssignStatement<O,T> toField( String name );
+    public ExpressionFactory<O,AssignStatement<O,T>> setLeftExpression();
 
-    public AssignStatement<O,T> toVar( String name );
+    public ExpressionFactory<O,AssignStatement<O,T>> setRightExpression();
 
-    public ExpressionFactory<O,AssignStatement<O,T>> to();
+    public AssignStatement<O,T> setFieldLeftExpression( String name );
 
-    public AssignStatement<O,T> varExpr( String name );
+    public AssignStatement<O,T> setVariableLeftExpression( String name );
 
-    public ExpressionFactory<O,AssignStatement<O,T>> expr();
+    public T setVariableRightExpression( String name );
 
 }

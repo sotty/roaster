@@ -11,6 +11,6 @@ public interface InvokeStatement<O extends JavaSource<O>, T extends Block<O,? ex
         extends Statement<O,T>,
         Invokeable<O,T,InvokeStatement<O,T>> {
 
-    public ExpressionFactory<O,InvokeStatement<O,T>> args();
+    public ExpressionFactory<O,InvokeStatement<O,T>> addArgument();
 
 }

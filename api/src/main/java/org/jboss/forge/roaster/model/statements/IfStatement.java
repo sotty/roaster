@@ -11,10 +11,10 @@ public interface IfStatement<O extends JavaSource<O>, T extends Block<O,? extend
         extends Statement<O,T>,
                 BlockHolder<O,IfStatement<O,T>> {
 
-    ExpressionFactory<O,IfStatement<O,T>> condition();
+    ExpressionFactory<O,IfStatement<O,T>> setCondition();
 
-    Block<O,IfStatement<O,T>> thenDo();
+    Block<O,IfStatement<O,T>> setThenBlock();
 
-    Block<O,IfStatement<O,T>> elseDo();
+    Block<O,IfStatement<O,T>> setElseBlock();
 
 }

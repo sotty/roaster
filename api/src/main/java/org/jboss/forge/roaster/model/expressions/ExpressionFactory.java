@@ -14,18 +14,20 @@ public interface ExpressionFactory<O extends JavaSource<O>, T extends Expression
 
     public ConstructorExpression<O,T> newInstance( Class<?> klass );
 
-    public Variable<O,T> var( String varName );
+    public Variable<O,T> variableRef( String varName );
 
     public OperatorExpression<O,T> operator( String op );
 
     public TernaryExpression<O,T> ternary();
 
-    public CastExpression<O,T> cast();
+    public ExpressionFactory<O,T> cast( String klass );
+
+    public ExpressionFactory<O,T> cast( Class klass );
 
     public ExpressionFactory<O,ParenExpression<O,T>> paren();
 
     public UnaryExpression<O,T> not();
 
-    public AssignExpression<O,T> assign();
+    public AssignExpression<O,T> assign( String operator );
 
 }

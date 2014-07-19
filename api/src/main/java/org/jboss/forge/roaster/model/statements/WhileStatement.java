@@ -9,8 +9,8 @@ public interface WhileStatement<O extends JavaSource<O>, T extends Block<O,? ext
         extends Statement<O,T>,
                 BlockHolder<O,WhileStatement<O,T>> {
 
-    ExpressionFactory<O,WhileStatement<O,T>> condition();
+    ExpressionFactory<O,WhileStatement<O,T>> setCondition();
 
-    Block<O,WhileStatement<O,T>> repeat();
+    Block<O,WhileStatement<O,T>> setBody();
 
 }

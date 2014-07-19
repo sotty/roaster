@@ -22,7 +22,7 @@ public class DeclareStatementsTest
       String target = "java.lang.Integer y=new java.lang.Integer();";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo( String x )" );
 
-      method.openBody().doDeclare().type( Integer.class ).name( "y" ).init().newInstance( Integer.class )
+      method.setBody().addDeclare().setVariable( "y", Integer.class ).setInitExpression().newInstance( Integer.class )
              .noMore().done();
 
       assertEquals( target, method.getBody().trim() );
@@ -34,7 +34,7 @@ public class DeclareStatementsTest
       String target = "int y=0;";
       MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo( String x )" );
 
-      method.openBody().doDeclare().type( int.class ).name( "y" ).initDefault().done();
+      method.setBody().addDeclare().setVariable( "y", int.class ).initDefault();
 
       assertEquals( target, method.getBody().trim() );
    }
@@ -46,8 +46,8 @@ public class DeclareStatementsTest
         String target = "java.lang.Integer y=0;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo( String x )" );
 
-        method.openBody().doDeclare().type( Integer.class ).name( "y" )
-                            .init()
+        method.setBody().addDeclare().setVariable( "y", Integer.class )
+                            .setInitExpression()
                                 .literal( 0 )
                             .noMore()
                          .done();
@@ -61,7 +61,7 @@ public class DeclareStatementsTest
         String target = "this.name=x;";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo( String x )" );
 
-        method.openBody().doAssign().toField( "name" ).varExpr( "x" );
+        method.setBody().addAssign().setFieldLeftExpression( "name" ).setVariableRightExpression( "x" );
 
         assertEquals( target, method.getBody().trim() );
     }
@@ -72,10 +72,10 @@ public class DeclareStatementsTest
         String target = "this.name=this.name + \" Doe\";";
         MethodSource<JavaClassSource> method = Roaster.create( JavaClassSource.class ).addMethod( "public void foo( String x )" );
 
-        method.openBody().doAssign()
-                            .toField( "name" )
-                            .expr().operator( "+" ).args()
-                                .field( "name" ).next()
+        method.setBody().addAssign()
+                            .setFieldLeftExpression( "name" )
+                            .setRightExpression().operator( "+" ).addArgument()
+                                .field( "name" ).nextArgument()
                                 .literal( " Doe" );
 
         assertEquals( target, method.getBody().trim() );

@@ -8,5 +8,5 @@ public interface OperatorExpression<O extends JavaSource<O>, T extends Expressio
     extends Argument<O,T>,
             Origin<T> {
 
-    public ExpressionFactory<O,OperatorExpression<O,T>> args();
+    public ExpressionFactory<O,OperatorExpression<O,T>> addArgument();
 }

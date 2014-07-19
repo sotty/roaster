@@ -6,9 +6,13 @@ public interface AssignExpression<O extends JavaSource<O>, T extends ExpressionS
     extends ExpressionSource<O>,
             Argument<O,T> {
 
-    public AssignExpression<O,T> assignOp( String op );
+    public T setVariableRightExpression( String name );
 
-    public ExpressionFactory<O,AssignExpression<O,T>> to();
+    public AssignExpression<O,T> setFieldLeftExpression( String name );
 
-    public ExpressionFactory<O,AssignExpression<O,T>> expr();
+    public AssignExpression<O,T> setVariableLeftExpression( String name );
+
+    public ExpressionFactory<O,AssignExpression<O,T>> setLeftExpression();
+
+    public ExpressionFactory<O,AssignExpression<O,T>> setRightExpression();
 }

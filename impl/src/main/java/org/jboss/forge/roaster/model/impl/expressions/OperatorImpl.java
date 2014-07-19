@@ -49,7 +49,7 @@ public class OperatorImpl<O extends JavaSource<O>, T extends ExpressionSource<O>
 
 
     @Override
-    public ExpressionFactory<O, OperatorExpression<O, T>> args() {
+    public ExpressionFactory<O, OperatorExpression<O, T>> addArgument() {
         return new MockArgumentImpl<O,OperatorExpression<O,T>>( this, expr.getAST() );
     }
 }

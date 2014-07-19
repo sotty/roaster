@@ -40,63 +40,63 @@ public class BlockImpl<O extends JavaSource<O>, T extends BlockHolder<O,?>>
     }
 
     @Override
-    public ReturnStatement<O, Block<O, T>> doReturn() {
+    public ReturnStatement<O, Block<O, T>> addReturn() {
         ReturnStatementImpl<O,Block<O,T>> returnSt = new ReturnStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( returnSt.getStatement() );
         return returnSt;
     }
 
     @Override
-    public AssignStatement<O, Block<O, T>> doAssign() {
+    public AssignStatement<O, Block<O, T>> addAssign() {
         AssignStatementImpl<O,Block<O,T>> assign = new AssignStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( assign.getStatement() );
         return assign;
     }
 
     @Override
-    public DeclareStatement<O, Block<O, T>> doDeclare() {
+    public DeclareStatement<O, Block<O, T>> addDeclare() {
         DeclareStatementImpl<O,Block<O,T>> declare = new DeclareStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( declare.getStatement() );
         return declare;
     }
 
     @Override
-    public InvokeStatement<O, Block<O, T>> doInvoke() {
+    public InvokeStatement<O, Block<O, T>> addInvoke() {
         InvokeStatementImpl<O,Block<O,T>> invoke = new InvokeStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( invoke.getStatement() );
         return invoke;
     }
 
     @Override
-    public IfStatement<O, Block<O, T>> doIf() {
+    public IfStatement<O, Block<O, T>> addIf() {
         IfStatementImpl<O,Block<O,T>> iff = new IfStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( iff.getStatement() );
         return iff;
     }
 
     @Override
-    public WhileStatement<O, Block<O, T>> doWhile() {
+    public WhileStatement<O, Block<O, T>> addWhile() {
         WhileStatementImpl<O,Block<O,T>> rep = new WhileStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( rep.getStatement() );
         return rep;
     }
 
     @Override
-    public ForStatement<O, Block<O, T>> doFor() {
+    public ForStatement<O, Block<O, T>> addFor() {
         ForStatementImpl<O,Block<O,T>> rep = new ForStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( rep.getStatement() );
         return rep;
     }
 
     @Override
-    public ForEachStatement<O, Block<O, T>> doForEach() {
+    public ForEachStatement<O, Block<O, T>> addForEach() {
         ForEachStatementImpl<O,Block<O,T>> rep = new ForEachStatementImpl<O, Block<O, T>>( this, block.getAST() );
         block.statements().add( rep.getStatement() );
         return rep;
     }
 
     @Override
-    public T close() {
+    public T closeBlock() {
         return origin;
     }
 

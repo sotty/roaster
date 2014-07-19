@@ -18,22 +18,6 @@ public class CastImpl<O extends JavaSource<O>, T extends ExpressionSource<O>>
         super( origin, expr, wireToParent );
     }
 
-    @Override
-    public ExpressionFactory<O,CastExpression<O,T>> expr() {
-       return new MockArgumentImpl<O, CastExpression<O,T>>( this, expr.getAST() );
-    }
-
-    @Override
-    public CastExpression<O, T> as( String type ) {
-        ((org.eclipse.jdt.core.dom.CastExpression) expr).setType( JDTHelper.getType( type, ast ) );
-        return this;
-    }
-
-    @Override
-    public CastExpression<O, T> as( Class type ) {
-        ((org.eclipse.jdt.core.dom.CastExpression) expr).setType( JDTHelper.getType( type, ast ) );
-        return this;
-    }
 
     protected void concatExpression( org.eclipse.jdt.core.dom.Expression parent, org.eclipse.jdt.core.dom.Expression child ) {
         ParenthesizedExpression par = ast.newParenthesizedExpression();

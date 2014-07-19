@@ -29,39 +29,39 @@ public class ReturnStatementImpl<O extends JavaSource<O>, T extends Block<O,? ex
         ret = ast.newReturnStatement();
     }
 
-    public ReturnStatement<O,T> var( String name ) {
+    public T variable( String name ) {
         ret.setExpression( ret.getAST().newName( name ) );
-        return this;
+        return getOrigin();
     }
 
     @Override
-    public ExpressionFactory<O, ReturnStatement<O,T>> expr() {
+    public ExpressionFactory<O, ReturnStatement<O,T>> setReturnExpression() {
         returnExpr = new MockArgumentImpl<O, ReturnStatement<O, T>>( this, ret.getAST() );
         return (ExpressionFactory<O, ReturnStatement<O,T>>) returnExpr;
     }
 
     @Override
     public InvokeExpression<O,ReturnStatement<O,T>> invoke() {
-        returnExpr = expr().invoke();
+        returnExpr = setReturnExpression().invoke();
         return (InvokeExpression<O, ReturnStatement<O, T>>) returnExpr;
     }
 
     @Override
-    public ReturnStatement<O,T> nil() {
+    public T nullLiteral() {
         ret.setExpression( ret.getAST().newNullLiteral() );
-        return this;
+        return getOrigin();
     }
 
     @Override
-    public ReturnStatement<O,T> yes() {
+    public T trueLiteral() {
         ret.setExpression( ret.getAST().newBooleanLiteral( true ) );
-        return this;
+        return getOrigin();
     }
 
     @Override
-    public ReturnStatement<O,T> no() {
+    public T falseLiteral() {
         ret.setExpression( ret.getAST().newBooleanLiteral( false ) );
-        return this;
+        return getOrigin();
     }
 
     @Override

@@ -15,16 +15,16 @@ public interface LiteralBuilder<O extends JavaSource<O>, T extends ExpressionSou
 
     public Literal<O,T> literal( Boolean val );
 
-    public Argument<O,T> zero( String klass );
+    public Argument<O,T> zeroLiteral( String klass );
 
-    public Argument<O,T> zero( Class<?> klass );
+    public Argument<O,T> zeroLiteral( Class<?> klass );
 
-    public Argument<O,T> self();
+    public Argument<O,T> thisLiteral();
 
-    public Argument<O,T> nil();
+    public Argument<O,T> nullLiteral();
 
-    public Argument<O,T> klass( String klass );
+    public Argument<O,T> classLiteral( String klass );
 
-    public Argument<O,T> klass( Class<?> klass );
+    public Argument<O,T> classLiteral( Class<?> klass );
 
 }

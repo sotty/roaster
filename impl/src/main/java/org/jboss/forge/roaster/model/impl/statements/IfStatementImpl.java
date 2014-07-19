@@ -54,19 +54,19 @@ public class IfStatementImpl<O extends JavaSource<O>, T extends Block<O,? extend
 
 
     @Override
-    public ExpressionFactory<O, IfStatement<O, T>> condition() {
+    public ExpressionFactory<O, IfStatement<O, T>> setCondition() {
         cond = new MockArgumentImpl<O, IfStatement<O, T>>( this, iff.getAST() );
         return (ExpressionFactory<O, IfStatement<O, T>>) cond;
     }
 
     @Override
-    public Block<O, IfStatement<O,T>> thenDo() {
+    public Block<O, IfStatement<O,T>> setThenBlock() {
         state = State.THEN;
         return new BlockImpl<O,IfStatement<O,T>>( this, iff.getAST() );
     }
 
     @Override
-    public Block<O, IfStatement<O,T>> elseDo() {
+    public Block<O, IfStatement<O,T>> setElseBlock() {
         state = State.ELSE;
         return new BlockImpl<O,IfStatement<O,T>>( this, iff.getAST() );
     }

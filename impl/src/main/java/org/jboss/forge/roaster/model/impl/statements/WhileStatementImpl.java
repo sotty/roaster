@@ -52,13 +52,13 @@ public class WhileStatementImpl<O extends JavaSource<O>, T extends Block<O,? ext
 
 
     @Override
-    public ExpressionFactory<O, WhileStatement<O, T>> condition() {
+    public ExpressionFactory<O, WhileStatement<O, T>> setCondition() {
         cond = new MockArgumentImpl<O, WhileStatement<O, T>>( this, rep.getAST() );
         return (ExpressionFactory<O, WhileStatement<O, T>>) cond;
     }
 
     @Override
-    public Block<O, WhileStatement<O,T>> repeat() {
+    public Block<O, WhileStatement<O,T>> setBody() {
         return new BlockImpl<O,WhileStatement<O,T>>( this, rep.getAST() );
     }
 

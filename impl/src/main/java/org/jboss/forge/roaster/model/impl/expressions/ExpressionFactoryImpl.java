@@ -1,7 +1,6 @@
 package org.jboss.forge.roaster.model.impl.expressions;
 
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
@@ -99,11 +98,11 @@ public abstract class ExpressionFactoryImpl<O extends JavaSource<O>, T extends E
     }
 
 
-    public Argument<O,T> zero( Class klass ) {
-        return zero( klass.getName() );
+    public Argument<O,T> zeroLiteral( Class klass ) {
+        return zeroLiteral( klass.getName() );
     }
 
-    public Argument<O,T> zero( String klass ) {
+    public Argument<O,T> zeroLiteral( String klass ) {
         org.eclipse.jdt.core.dom.Expression init;
         if ( boolean.class.getName().equals( klass ) ) {
             init = ast.newBooleanLiteral( false );
@@ -149,7 +148,7 @@ public abstract class ExpressionFactoryImpl<O extends JavaSource<O>, T extends E
     }
 
     @Override
-    public Argument<O,T> nil() {
+    public Argument<O,T> nullLiteral() {
         NullLiteral nil = ast.newNullLiteral();
         return subArg( nil, ExpressionTypes.LITERAL );
     }
@@ -171,12 +170,12 @@ public abstract class ExpressionFactoryImpl<O extends JavaSource<O>, T extends E
     }
 
     @Override
-    public Argument<O,T> klass( Class<?> klass ) {
-        return klass( klass.getName() );
+    public Argument<O,T> classLiteral( Class<?> klass ) {
+        return classLiteral( klass.getName() );
     }
 
     @Override
-    public Argument<O,T> klass( String klass ) {
+    public Argument<O,T> classLiteral( String klass ) {
         Name klassName = ast.newName( klass );
         return subArg( klassName, ExpressionTypes.LITERAL );
     }
@@ -195,9 +194,19 @@ public abstract class ExpressionFactoryImpl<O extends JavaSource<O>, T extends E
     }
 
     @Override
-    public CastExpression<O,T> cast() {
+    public ExpressionFactory<O,T> cast( String klass ) {
         org.eclipse.jdt.core.dom.CastExpression cast = ast.newCastExpression();
-        return (CastExpression<O,T>) subArg( cast, ExpressionTypes.CAST );
+        cast.setType( JDTHelper.getType( klass, ast ) );
+        CastExpression<O,T> expr = (CastExpression<O,T>) subArg( cast, ExpressionTypes.CAST );
+        return (ExpressionFactory<O, T>) new MockArgumentImpl<O, CastExpression<O,T>>( expr, ast );
+    }
+
+    @Override
+    public ExpressionFactory<O,T> cast( Class klass ) {
+        org.eclipse.jdt.core.dom.CastExpression cast = ast.newCastExpression();
+        cast.setType( JDTHelper.getType( klass, ast ) );
+        CastExpression<O,T> expr = (CastExpression<O,T>) subArg( cast, ExpressionTypes.CAST );
+        return (ExpressionFactory<O, T>) new MockArgumentImpl<O, CastExpression<O,T>>( expr, ast );
     }
 
     @Override
@@ -215,19 +224,20 @@ public abstract class ExpressionFactoryImpl<O extends JavaSource<O>, T extends E
     }
 
     @Override
-    public Variable<O,T> var( String varName ) {
+    public Variable<O,T> variableRef( String varName ) {
         Name exp = ast.newName( varName );
         return subArg( exp, ExpressionTypes.VAR );
     }
 
     @Override
-    public AssignExpression<O,T> assign() {
+    public AssignExpression<O,T> assign( String operator ) {
         Assignment axx = ast.newAssignment();
+        axx.setOperator( Assignment.Operator.toOperator( operator ) );
         return subArg( axx, ExpressionTypes.ASSIGN );
     }
 
     @Override
-    public Argument<O,T> self() {
+    public Argument<O,T> thisLiteral() {
         ThisExpression exp = ast.newThisExpression();
         return subArg( exp, ExpressionTypes.SELF );
     }

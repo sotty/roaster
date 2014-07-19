@@ -12,7 +12,6 @@ import org.jboss.forge.roaster.model.expressions.ExpressionSource;
 import org.jboss.forge.roaster.model.impl.JDTHelper;
 import org.jboss.forge.roaster.model.impl.StatementImpl;
 import org.jboss.forge.roaster.model.impl.expressions.ArgumentImpl;
-import org.jboss.forge.roaster.model.impl.expressions.JdtBlockWrapper;
 import org.jboss.forge.roaster.model.impl.expressions.JdtExpressionWrapper;
 import org.jboss.forge.roaster.model.impl.expressions.MockArgumentImpl;
 import org.jboss.forge.roaster.model.source.BlockHolder;
@@ -34,33 +33,29 @@ public class DeclareStatementImpl<O extends JavaSource<O>, T extends Block<O,? e
 
     }
 
-    public DeclareStatement<O, T> name( String name ) {
+    public DeclareStatement<O, T> setVariable( String name, Class type ) {
         getMainVar().setName( var.getAST().newSimpleName( name ) );
-        return this;
-    }
-
-    @Override
-    public DeclareStatement<O, T> type( String typeName ) {
-        var.setType( var.getAST().newSimpleType( var.getAST().newName( typeName ) ) );
-        return this;
-    }
-
-    @Override
-    public DeclareStatement<O, T> type( Class type ) {
         var.setType( JDTHelper.getType( type, var.getAST() ) );
         return this;
     }
 
+    public DeclareStatement<O, T> setVariable( String name, String type ) {
+        getMainVar().setName( var.getAST().newSimpleName( name ) );
+        var.setType( JDTHelper.getType( type, var.getAST() ) );
+        return this;
+    }
+
+
     @Override
-    public DeclareStatement<O, T> initDefault() {
+    public T initDefault() {
         if ( var.getType() != null ) {
             initExpr = new MockArgumentImpl<O, DeclareStatement<O,T>>( this, var.getAST() );
-            ( (ExpressionFactory<O, DeclareStatement<O,T>>) initExpr ).zero( var.getType().toString() );
+            ( (ExpressionFactory<O, DeclareStatement<O,T>>) initExpr ).zeroLiteral( var.getType().toString() );
 
         } else {
             throw new IllegalStateException( "Unable to initialize a var before its type has been specified " );
         }
-        return this;
+        return getOrigin();
     }
 
     @Override
@@ -73,7 +68,7 @@ public class DeclareStatementImpl<O extends JavaSource<O>, T extends Block<O,? e
     }
 
     @Override
-    public ExpressionFactory<O,DeclareStatement<O,T>> init() {
+    public ExpressionFactory<O,DeclareStatement<O,T>> setInitExpression() {
         initExpr = new MockArgumentImpl<O, DeclareStatement<O,T>>( this, var.getAST() );
         return (ExpressionFactory<O, DeclareStatement<O,T>>) initExpr;
     }

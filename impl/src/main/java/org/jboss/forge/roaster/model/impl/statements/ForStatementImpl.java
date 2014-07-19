@@ -69,14 +69,14 @@ public class ForStatementImpl<O extends JavaSource<O>, T extends Block<O,? exten
     }
 
     @Override
-    public ExpressionFactory<O, ForStatement<O, T>> condition() {
+    public ExpressionFactory<O, ForStatement<O, T>> setCondition() {
         state = State.COND;
         cond = new MockArgumentImpl<O, ForStatement<O, T>>( this, iter.getAST() );
         return (ExpressionFactory<O, ForStatement<O, T>>) cond;
     }
 
     @Override
-    public DeclareExpression<O, ForStatement<O, T>> declare() {
+    public DeclareExpression<O, ForStatement<O, T>> addDeclaration() {
         state = State.INIT;
         if ( var == null ) {
             var = iter.getAST().newVariableDeclarationExpression( iter.getAST().newVariableDeclarationFragment() );
@@ -87,13 +87,13 @@ public class ForStatementImpl<O extends JavaSource<O>, T extends Block<O,? exten
     }
 
     @Override
-    public ExpressionFactory<O, ForStatement<O, T>> update() {
+    public ExpressionFactory<O, ForStatement<O, T>> addUpdate() {
         state = State.UPD;
         return new MockArgumentImpl<O,ForStatement<O,T>>( this, iter.getAST() );
     }
 
     @Override
-    public Block<O, ForStatement<O,T>> repeat() {
+    public Block<O, ForStatement<O,T>> setBody() {
         return new BlockImpl<O,ForStatement<O,T>>( this, iter.getAST() );
     }
 

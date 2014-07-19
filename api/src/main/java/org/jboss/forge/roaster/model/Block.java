@@ -17,22 +17,58 @@ import org.jboss.forge.roaster.model.statements.WhileStatement;
 public interface Block<O extends JavaSource<O>, T extends BlockHolder<O,?>>
         extends Origin<T> {
 
-    ReturnStatement<O,Block<O,T>> doReturn();
+    /**
+     * Adds a return statement to the current block
+     * @return
+     */
+    ReturnStatement<O,Block<O,T>> addReturn();
 
-    AssignStatement<O,Block<O,T>> doAssign();
+    /**
+     * Adds a variable assignment statement to the current block
+     * @return
+     */
+    AssignStatement<O,Block<O,T>> addAssign();
 
-    DeclareStatement<O,Block<O,T>> doDeclare();
+    /**
+     * Adds a variable declaration statement to the current block
+     * @return
+     */
+    DeclareStatement<O,Block<O,T>> addDeclare();
 
-    InvokeStatement<O,Block<O,T>> doInvoke();
+    /**
+     * Adds a method invocation statement to the current block
+     * @return
+     */
+    InvokeStatement<O,Block<O,T>> addInvoke();
 
-    IfStatement<O,Block<O,T>> doIf();
+    /**
+     * Adds an if statement to the current block
+     * @return
+     */
+    IfStatement<O,Block<O,T>> addIf();
 
-    WhileStatement<O,Block<O,T>> doWhile();
+    /**
+     * Adds a while statement to the current block
+     * @return
+     */
+    WhileStatement<O,Block<O,T>> addWhile();
 
-    ForStatement<O,Block<O,T>> doFor();
+    /**
+     * Adds a for statement to the current block
+     * @return
+     */
+    ForStatement<O,Block<O,T>> addFor();
 
-    ForEachStatement<O,Block<O,T>> doForEach();
+    /**
+     * Adds an enhanced for statement to the current block
+     * @return
+     */
+    ForEachStatement<O,Block<O,T>> addForEach();
 
-    T close();
+    /**
+     * Returns the block's parent
+     * @return
+     */
+    T closeBlock();
 
 }

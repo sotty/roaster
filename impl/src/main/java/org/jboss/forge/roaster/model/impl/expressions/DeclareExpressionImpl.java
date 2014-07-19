@@ -21,9 +21,18 @@ public class DeclareExpressionImpl<O extends JavaSource<O>, T extends Expression
     }
 
     @Override
-    public DeclareExpression<O, T> name( String name ) {
+    public DeclareExpression<O, T> setVariable( String name, Class type ) {
         VariableDeclarationExpression decl = ( VariableDeclarationExpression ) expr;
         (( VariableDeclarationFragment ) decl.fragments().get( decl.fragments().size() - 1 )).setName( ast.newSimpleName( name ) );
+        decl.setType( JDTHelper.getType( type, ast ) );
+        return this;
+    }
+
+    @Override
+    public DeclareExpression<O, T> setVariable( String name, String type ) {
+        VariableDeclarationExpression decl = ( VariableDeclarationExpression ) expr;
+        (( VariableDeclarationFragment ) decl.fragments().get( decl.fragments().size() - 1 )).setName( ast.newSimpleName( name ) );
+        decl.setType( JDTHelper.getType( type, ast ) );
         return this;
     }
 
@@ -31,20 +40,6 @@ public class DeclareExpressionImpl<O extends JavaSource<O>, T extends Expression
     protected void concatExpression( Expression parent, Expression child ) {
         VariableDeclarationExpression decl = ( VariableDeclarationExpression ) expr;
         (( VariableDeclarationFragment ) decl.fragments().get( decl.fragments().size() - 1 )).setInitializer( child );
-    }
-
-    @Override
-    public DeclareExpression<O, T> type( Class<?> klass ) {
-        VariableDeclarationExpression decl = ( VariableDeclarationExpression ) expr;
-        decl.setType( JDTHelper.getType( klass, ast ) );
-        return this;
-    }
-
-    @Override
-    public DeclareExpression<O, T> type( String klass ) {
-        VariableDeclarationExpression decl = ( VariableDeclarationExpression ) expr;
-        decl.setType( JDTHelper.getType( klass, ast ) );
-        return this;
     }
 
     @Override

@@ -10,11 +10,9 @@ public interface ForEachStatement<O extends JavaSource<O>, T extends Block<O,? e
         extends Statement<O,T>,
                 BlockHolder<O,ForEachStatement<O,T>> {
 
-    ForEachStatement<O,T> iterator( String name );
+    ForEachStatement<O,T> iterator( String name, Class type );
 
-    ForEachStatement<O,T> type( String type );
-
-    ForEachStatement<O,T> type( Class<?> type );
+    ForEachStatement<O,T> iterator( String name, String type );
 
     ExpressionFactory<O,ForEachStatement<O,T>> in();
 

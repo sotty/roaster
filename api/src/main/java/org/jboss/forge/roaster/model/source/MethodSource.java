@@ -111,6 +111,6 @@ public interface MethodSource<O extends JavaSource<O>> extends Method<O, MethodS
     * Opens a block of statements to define the method body
     * @return
     */
-   public Block<O,MethodSource<O>> openBody();
+   public Block<O,MethodSource<O>> setBody();
 
 }
